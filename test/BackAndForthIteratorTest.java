@@ -39,6 +39,16 @@ public class BackAndForthIteratorTest {
   }
 
   @Test
+  public void testGetPremutationOnIndex() {
+    Permutations testPermutation = new Permutations("qwer");
+    // test length 1
+    assertEquals("q", testPermutation.getPremutationOnIndex(0));
+    assertEquals("wq", testPermutation.getPremutationOnIndex(10));
+    assertEquals("ewq", testPermutation.getPremutationOnIndex(30));
+    assertEquals("wrqe", testPermutation.getPremutationOnIndex(50));
+  }
+
+  @Test
   public void testHasPrevious() {
     Permutations testPermutation = new Permutations("qwer");
     assertFalse(testPermutation.hasPrevious());

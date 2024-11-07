@@ -1,5 +1,7 @@
 package permutations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Permutations implements BackAndForthIterator{
@@ -47,6 +49,38 @@ public class Permutations implements BackAndForthIterator{
       result *= i;
     }
     return result;
+  }
+
+  public String getPremutationOnIndex(int index) {
+    // determine the length
+    int premutationLength = 1;
+    int sequenceLength = sequence.length();
+    int countIndex = 0;
+    while (premutationLength <= sequenceLength) {
+      int countForLength = factorial(sequenceLength)
+              / factorial(sequenceLength - premutationLength);
+      if (index < countForLength + countIndex) {
+        index -= countIndex;
+        break;
+      }
+      countIndex += countForLength;
+      premutationLength ++;
+    }
+    // find the starting character
+    List<Character> chars = new ArrayList<Character>();
+    for (char c : sequence.toCharArray()) {
+      chars.add(c);
+    }
+    StringBuilder result = new StringBuilder();
+    for (int i = premutationLength; i > 0; i--) {
+      int factorial = factorial(sequenceLength-1);
+      int charIndex = index / factorial;
+      result.append(chars.get(charIndex));
+      chars.remove(charIndex);
+      index %= factorial;
+      sequenceLength --;
+    }
+    return result.toString();
   }
 
 
