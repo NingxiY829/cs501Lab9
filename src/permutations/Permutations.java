@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Permutations implements BackAndForthIterator{
-  private int currentIndex;
+  private int previousIndex;
+  private int nextIndex;
   private final int startLength;
   private final String sequence;
   private int permutationNumber;
@@ -16,7 +17,8 @@ public class Permutations implements BackAndForthIterator{
     }
     this.sequence = sequence;
     this.startLength = 1;
-    this.currentIndex = 0;
+    this.previousIndex = -1;
+    this.nextIndex = 0;
     calculatePermutationNumber();
   }
 
@@ -27,7 +29,8 @@ public class Permutations implements BackAndForthIterator{
     }
     this.sequence = sequence;
     this.startLength = startLength;
-    this.currentIndex = -1;
+    this.previousIndex = -1;
+    this.nextIndex = 0;
     calculatePermutationNumber();
   }
 
@@ -51,6 +54,7 @@ public class Permutations implements BackAndForthIterator{
     return result;
   }
 
+  // TODO: fix to qqqq issue in length 1
   public String getPremutationOnIndex(int index) {
     // determine the length
     int premutationLength = 1;
@@ -89,22 +93,25 @@ public class Permutations implements BackAndForthIterator{
     if (!hasPrevious()) {
       throw new NoSuchElementException();
     }
-    return null;
+    previousIndex --;
+    nextIndex --;
+    return getPremutationOnIndex(previousIndex + 1);
   }
 
   @Override
   public boolean hasPrevious() {
-    return currentIndex > 0;
+    return previousIndex > 0;
   }
 
   @Override
   public boolean hasNext() {
-    return currentIndex < permutationNumber;
+    return nextIndex < permutationNumber - 1;
   }
 
   @Override
   public String next() {
-    currentIndex++;
-    return null;
+    nextIndex ++;
+    previousIndex ++;
+    return getPremutationOnIndex(nextIndex - 1);
   }
 }
