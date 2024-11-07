@@ -14,7 +14,7 @@ public class Permutations implements BackAndForthIterator{
     }
     this.sequence = sequence;
     this.startLength = 1;
-    this.currentIndex = -1;
+    this.currentIndex = 0;
     calculatePermutationNumber();
   }
 
@@ -37,6 +37,10 @@ public class Permutations implements BackAndForthIterator{
     permutationNumber = total;
   }
 
+  public int getPermutationNumber() {
+    return permutationNumber;
+  }
+
   private int factorial(int n) {
     int result = 1;
     for (int i = 2; i <= n; i++) {
@@ -47,11 +51,10 @@ public class Permutations implements BackAndForthIterator{
 
 
   @Override
-  public Object previous() throws NoSuchElementException {
+  public String previous() throws NoSuchElementException {
     if (!hasPrevious()) {
       throw new NoSuchElementException();
     }
-    currentIndex--;
     return null;
   }
 
@@ -66,7 +69,8 @@ public class Permutations implements BackAndForthIterator{
   }
 
   @Override
-  public Object next() {
+  public String next() {
+    currentIndex++;
     return null;
   }
 }
