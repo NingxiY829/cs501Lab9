@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 public class Permutations implements BackAndForthIterator{
   private int previousIndex;
   private int nextIndex;
-  private final int startLength;
   private final String sequence;
   private int permutationNumber;
 
@@ -16,10 +15,9 @@ public class Permutations implements BackAndForthIterator{
       throw new IllegalArgumentException();
     }
     this.sequence = sequence;
-    this.startLength = 1;
     this.previousIndex = -1;
     this.nextIndex = 0;
-    calculatePermutationNumber(startLength);
+    calculatePermutationNumber();
   }
 
   public Permutations(String sequence, int startLength) {
@@ -28,16 +26,22 @@ public class Permutations implements BackAndForthIterator{
       throw new IllegalArgumentException();
     }
     this.sequence = sequence;
-    this.startLength = startLength;
-    this.previousIndex = -1;
-    this.nextIndex = 0;
-    calculatePermutationNumber(startLength);
+    int n = sequence.length();
+    int targetIndex = 0;
+    if (startLength != 1) {
+      for (int k = 1; k < startLength; k++) {
+        targetIndex += combination(n, k);
+      }
+    }
+    this.previousIndex = targetIndex - 1;
+    this.nextIndex = targetIndex;
+    calculatePermutationNumber();
   }
 
-  private void calculatePermutationNumber(int startLength) {
+  private void calculatePermutationNumber() {
     int totalPermutations = 0;
     int n = sequence.length();
-    for (int k = startLength; k <= n; k++) {
+    for (int k = 1; k <= n; k++) {
       totalPermutations += combination(n, k);
     }
     permutationNumber = totalPermutations;
@@ -45,14 +49,6 @@ public class Permutations implements BackAndForthIterator{
 
   public int getPermutationNumber() {
     return permutationNumber;
-  }
-
-  private int factorial(int n) {
-    int result = 1;
-    for (int i = 2; i <= n; i++) {
-      result *= i;
-    }
-    return result;
   }
 
   private int combination(int n, int k) {
@@ -68,12 +64,6 @@ public class Permutations implements BackAndForthIterator{
 
   public String getPremutationOnIndex(int targetIndex) {
     int n = sequence.length();
-
-    if (startLength != 1) {
-      for (int k = 1; k < startLength; k++) {
-        targetIndex += combination(n, k);
-      }
-    }
     int cumulativeCount = 0;
     int length = 0;
 

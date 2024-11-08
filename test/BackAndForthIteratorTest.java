@@ -66,21 +66,22 @@ public class BackAndForthIteratorTest {
   public void testHasNext() {
     Permutations testPermutation = new Permutations("qw");
     int count1 = testPermutation.getPermutationNumber();
-    for (int i = 0; i < count1 - 1; i++) {
+    for (int i = 1; i < count1 - 1; i++) {
       testPermutation.next();
       assertTrue(testPermutation.hasNext());
     }
     testPermutation.next();
     assertFalse(testPermutation.hasNext());
+  }
+
+  @Test
+  public void testHasNext2() {
     Permutations testPermutation2 = new Permutations("qwer", 4);
     assertTrue(testPermutation2.hasNext());
-    int count = testPermutation2.getPermutationNumber();
-    for (int i = 0; i < count - 2; i++) {
-      testPermutation2.next();
-      assertTrue(testPermutation2.hasNext());
-    }
-    testPermutation2.next();
-    assertFalse(testPermutation2.hasNext());
+    assertEquals("qwer", testPermutation2.next());
+    Permutations testPermutation3 = new Permutations("qwer", 3);
+    assertTrue(testPermutation3.hasNext());
+    assertEquals("qwe", testPermutation3.next());
   }
 
   @Test
@@ -167,6 +168,19 @@ public class BackAndForthIteratorTest {
     }
     testPermutation.previous();
   }
+
+  @Test
+  public void twoArhumentMoveBackord() {
+    Permutations testPermutation = new Permutations("qwer", 2);
+    assertTrue(testPermutation.hasPrevious());
+    assertEquals("r", testPermutation.previous());
+    assertEquals("e", testPermutation.previous());
+    assertEquals("w", testPermutation.previous());
+    assertEquals("q", testPermutation.previous());
+    assertFalse(testPermutation.hasPrevious());
+  }
+
+
 
 
 }
