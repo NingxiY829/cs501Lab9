@@ -54,11 +54,17 @@ public class Permutations implements BackAndForthIterator{
     return result;
   }
 
-  // TODO: fix to qqqq issue in length 1
   public String getPremutationOnIndex(int index) {
+    // check if this start the index form 1
+    int sequenceLength = sequence.length();
+    if (startLength != 1) {
+      for (int i = startLength - 1; i > 0; i--) {
+        index = index + factorial(sequenceLength) / factorial(sequenceLength - i);
+      }
+    }
     // determine the length
     int premutationLength = 1;
-    int sequenceLength = sequence.length();
+
     int countIndex = 0;
     while (premutationLength <= sequenceLength) {
       int countForLength = factorial(sequenceLength)
@@ -76,14 +82,27 @@ public class Permutations implements BackAndForthIterator{
       chars.add(c);
     }
     StringBuilder result = new StringBuilder();
-    for (int i = premutationLength; i > 0; i--) {
-      int factorial = factorial(sequenceLength-1);
-      int charIndex = index / factorial;
-      result.append(chars.get(charIndex));
-      chars.remove(charIndex);
-      index %= factorial;
-      sequenceLength --;
+    if (premutationLength == 1) {
+      result.append(chars.get(index));
+    } else if (premutationLength == 2) {
+      int combinationNuber = chars.size() - 1;
+      int firstIndex = index / combinationNuber;
+      result.append(chars.get(firstIndex));
+      chars.remove(firstIndex);
+      int secondIndex = index % combinationNuber;
+      result.append(chars.get(secondIndex));
+
+    } else {
+      for (int i = premutationLength; i > 0; i--) {
+        int factorial = factorial(chars.size() - 1);
+        int charIndex = index / factorial;
+        result.append(chars.get(charIndex));
+        chars.remove(charIndex);
+        index %= factorial;
+      }
+
     }
+
     return result.toString();
   }
 
@@ -100,7 +119,7 @@ public class Permutations implements BackAndForthIterator{
 
   @Override
   public boolean hasPrevious() {
-    return previousIndex > 0;
+    return previousIndex >= 0;
   }
 
   @Override
@@ -110,6 +129,9 @@ public class Permutations implements BackAndForthIterator{
 
   @Override
   public String next() {
+    if (! hasNext()) {
+      throw new NoSuchElementException();
+    }
     nextIndex ++;
     previousIndex ++;
     return getPremutationOnIndex(nextIndex - 1);

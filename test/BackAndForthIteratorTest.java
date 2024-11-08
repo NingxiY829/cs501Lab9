@@ -41,12 +41,22 @@ public class BackAndForthIteratorTest {
   @Test
   public void testGetPremutationOnIndex() {
     Permutations testPermutation = new Permutations("qwer");
+//    int count = testPermutation.getPermutationNumber();
+//    StringBuilder sb = new StringBuilder();
+//    for (int i = 0; i < count; i++) {
+//      sb.append(testPermutation.getPremutationOnIndex(i)).append('\n');
+//    }
+//    assertEquals("", sb.toString());
+    assertEquals("wq", testPermutation.getPremutationOnIndex(7));
+
     // test length 1
     assertEquals("q", testPermutation.getPremutationOnIndex(0));
-    assertEquals("w", testPermutation.getPremutationOnIndex(6));
-    assertEquals("wq", testPermutation.getPremutationOnIndex(10));
+    assertEquals("qr", testPermutation.getPremutationOnIndex(6));
+    assertEquals("eq", testPermutation.getPremutationOnIndex(10));
     assertEquals("ewq", testPermutation.getPremutationOnIndex(30));
     assertEquals("wrqe", testPermutation.getPremutationOnIndex(50));
+    Permutations testPermutation2 = new Permutations("qwer", 2);
+    assertEquals("qw", testPermutation2.getPremutationOnIndex(0));
   }
 
 
@@ -78,11 +88,39 @@ public class BackAndForthIteratorTest {
     assertEquals("q", result);
     result = testPermutation.next();
     assertEquals("w", result);
+    Permutations testPermutation2 = new Permutations("qwer", 2);
+    result = testPermutation2.next();
+    assertEquals("qw", result);
+    result = testPermutation2.next();
+    assertEquals("qe", result);
   }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testNext2() {
+    Permutations testPermutation = new Permutations("qw");
+    int count1 = testPermutation.getPermutationNumber();
+    for (int i = 0; i < count1 - 1; i++) {
+      testPermutation.next();
+    }
+    testPermutation.next();
+  }
+
   @Test
   public void testHasPrevious() {
     Permutations testPermutation = new Permutations("qwer");
     assertFalse(testPermutation.hasPrevious());
+    testPermutation.next();
+    assertTrue(testPermutation.hasPrevious());
+    Permutations testPermutation2 = new Permutations("qwer", 2);
+    assertFalse(testPermutation2.hasPrevious());
+    testPermutation2.next();
+    assertTrue(testPermutation2.hasPrevious());
+  }
+
+  @Test
+  public void testPrevious() {
+    Permutations testPermutation = new Permutations("qwer");
+
   }
 
 
