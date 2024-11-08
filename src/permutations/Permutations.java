@@ -19,7 +19,7 @@ public class Permutations implements BackAndForthIterator{
     this.startLength = 1;
     this.previousIndex = -1;
     this.nextIndex = 0;
-    calculatePermutationNumber();
+    calculatePermutationNumber(startLength);
   }
 
   public Permutations(String sequence, int startLength) {
@@ -31,15 +31,16 @@ public class Permutations implements BackAndForthIterator{
     this.startLength = startLength;
     this.previousIndex = -1;
     this.nextIndex = 0;
-    calculatePermutationNumber();
+    calculatePermutationNumber(startLength);
   }
 
-  public void calculatePermutationNumber() {
-    int total = 0;
-    for (int k = startLength; k <= sequence.length(); k++) {
-      total += factorial(sequence.length()) / factorial(sequence.length() - k);
+  private void calculatePermutationNumber(int startLength) {
+    int totalPermutations = 0;
+    int n = sequence.length();
+    for (int k = startLength; k <= n; k++) {
+      totalPermutations += combination(n, k);
     }
-    permutationNumber = total;
+    permutationNumber = totalPermutations;
   }
 
   public int getPermutationNumber() {
@@ -54,56 +55,54 @@ public class Permutations implements BackAndForthIterator{
     return result;
   }
 
-  public String getPremutationOnIndex(int index) {
-    // check if this start the index form 1
-    int sequenceLength = sequence.length();
+  private int combination(int n, int k) {
+    if (k > n) return 0;
+    int numerator = 1;
+    int denominator = 1;
+    for (int i = 0; i < k; i++) {
+      numerator *= (n - i);
+      denominator *= (i + 1);
+    }
+    return numerator / denominator;
+  }
+
+  public String getPremutationOnIndex(int targetIndex) {
+    int n = sequence.length();
+
     if (startLength != 1) {
-      for (int i = startLength - 1; i > 0; i--) {
-        index = index + factorial(sequenceLength) / factorial(sequenceLength - i);
+      for (int k = 1; k < startLength; k++) {
+        targetIndex += combination(n, k);
       }
     }
-    // determine the length
-    int premutationLength = 1;
+    int cumulativeCount = 0;
+    int length = 0;
 
-    int countIndex = 0;
-    while (premutationLength <= sequenceLength) {
-      int countForLength = factorial(sequenceLength)
-              / factorial(sequenceLength - premutationLength);
-      if (index < countForLength + countIndex) {
-        index -= countIndex;
+    for (int k = 1; k <= n; k++) {
+      int count = combination(n, k);
+      if (cumulativeCount + count > targetIndex) {
+        length = k;
+        targetIndex -= cumulativeCount;
         break;
       }
-      countIndex += countForLength;
-      premutationLength ++;
+      cumulativeCount += count;
     }
-    // find the starting character
-    List<Character> chars = new ArrayList<Character>();
-    for (char c : sequence.toCharArray()) {
-      chars.add(c);
-    }
-    StringBuilder result = new StringBuilder();
-    if (premutationLength == 1) {
-      result.append(chars.get(index));
-    } else if (premutationLength == 2) {
-      int combinationNuber = chars.size() - 1;
-      int firstIndex = index / combinationNuber;
-      result.append(chars.get(firstIndex));
-      chars.remove(firstIndex);
-      int secondIndex = index % combinationNuber;
-      result.append(chars.get(secondIndex));
 
-    } else {
-      for (int i = premutationLength; i > 0; i--) {
-        int factorial = factorial(chars.size() - 1);
-        int charIndex = index / factorial;
-        result.append(chars.get(charIndex));
-        chars.remove(charIndex);
-        index %= factorial;
+    StringBuilder combination = new StringBuilder();
+    int remainingLength = length;
+
+    for (int i = 0; i < n && remainingLength > 0; i++) {
+      int combinationsWithCurrentChar = combination(n - i - 1, remainingLength - 1);
+
+      if (targetIndex < combinationsWithCurrentChar) {
+        combination.append(sequence.charAt(i));
+        remainingLength--;
+      } else {
+        targetIndex -= combinationsWithCurrentChar;
       }
-
     }
 
-    return result.toString();
+    return combination.toString();
+
   }
 
 
@@ -124,7 +123,7 @@ public class Permutations implements BackAndForthIterator{
 
   @Override
   public boolean hasNext() {
-    return nextIndex < permutationNumber - 1;
+    return nextIndex < permutationNumber;
   }
 
   @Override

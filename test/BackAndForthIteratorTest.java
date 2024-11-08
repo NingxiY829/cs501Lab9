@@ -34,11 +34,11 @@ public class BackAndForthIteratorTest {
   @Test
   public void testCalculatePermutationNumber() {
     Permutations testPermutation = new Permutations("qwer");
-    assertEquals(64, testPermutation.getPermutationNumber());
+    assertEquals(15, testPermutation.getPermutationNumber());
     Permutations testPermutation2 = new Permutations("qwer", 2);
-    assertEquals(60, testPermutation2.getPermutationNumber());
+    assertEquals(11, testPermutation2.getPermutationNumber());
     Permutations testPermutation3 = new Permutations("qwer", 3);
-    assertEquals(48, testPermutation3.getPermutationNumber());
+    assertEquals(5, testPermutation3.getPermutationNumber());
   }
 
   @Test
@@ -50,14 +50,13 @@ public class BackAndForthIteratorTest {
 //      sb.append(testPermutation.getPremutationOnIndex(i)).append('\n');
 //    }
 //    assertEquals("", sb.toString());
-    assertEquals("wq", testPermutation.getPremutationOnIndex(7));
+    assertEquals("we", testPermutation.getPremutationOnIndex(7));
 
     // test length 1
     assertEquals("q", testPermutation.getPremutationOnIndex(0));
     assertEquals("qr", testPermutation.getPremutationOnIndex(6));
-    assertEquals("eq", testPermutation.getPremutationOnIndex(10));
-    assertEquals("ewq", testPermutation.getPremutationOnIndex(30));
-    assertEquals("wrqe", testPermutation.getPremutationOnIndex(50));
+    assertEquals("qwe", testPermutation.getPremutationOnIndex(10));
+    assertEquals("qwer", testPermutation.getPremutationOnIndex(14));
     Permutations testPermutation2 = new Permutations("qwer", 2);
     assertEquals("qw", testPermutation2.getPremutationOnIndex(0));
   }
@@ -67,7 +66,7 @@ public class BackAndForthIteratorTest {
   public void testHasNext() {
     Permutations testPermutation = new Permutations("qw");
     int count1 = testPermutation.getPermutationNumber();
-    for (int i = 0; i < count1 - 2; i++) {
+    for (int i = 0; i < count1 - 1; i++) {
       testPermutation.next();
       assertTrue(testPermutation.hasNext());
     }
@@ -102,7 +101,7 @@ public class BackAndForthIteratorTest {
   public void testNext2() {
     Permutations testPermutation = new Permutations("qw");
     int count1 = testPermutation.getPermutationNumber();
-    for (int i = 0; i < count1 - 1; i++) {
+    for (int i = 0; i < count1; i++) {
       testPermutation.next();
     }
     testPermutation.next();
@@ -112,7 +111,7 @@ public class BackAndForthIteratorTest {
   public void testNext3() {
     Permutations testPermutation = new Permutations("qwer", 2);
     int count1 = testPermutation.getPermutationNumber();
-    for (int i = 0; i < count1 - 1; i++) {
+    for (int i = 0; i < count1; i++) {
       testPermutation.next();
     }
     testPermutation.next();
