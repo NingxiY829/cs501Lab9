@@ -1,5 +1,8 @@
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
 import permutations.Permutations;
 
 import static org.junit.Assert.*;
@@ -95,9 +98,19 @@ public class BackAndForthIteratorTest {
     assertEquals("qe", result);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test (expected = NoSuchElementException.class)
   public void testNext2() {
     Permutations testPermutation = new Permutations("qw");
+    int count1 = testPermutation.getPermutationNumber();
+    for (int i = 0; i < count1 - 1; i++) {
+      testPermutation.next();
+    }
+    testPermutation.next();
+  }
+
+  @Test (expected = NoSuchElementException.class)
+  public void testNext3() {
+    Permutations testPermutation = new Permutations("qwer", 2);
     int count1 = testPermutation.getPermutationNumber();
     for (int i = 0; i < count1 - 1; i++) {
       testPermutation.next();
@@ -120,7 +133,40 @@ public class BackAndForthIteratorTest {
   @Test
   public void testPrevious() {
     Permutations testPermutation = new Permutations("qwer");
+    int count1 = testPermutation.getPermutationNumber();
+    ArrayList<String> result = new ArrayList<>();
+    for (int i = 1; i < count1; i++) {
+      result.add(testPermutation.next());
+    }
+    for (int i = 1; i < count1 - 1; i++) {
+      assertEquals(result.get(count1 -1 - i), testPermutation.previous());
+    }
+  }
 
+  @Test
+  public void testPrevious3() {
+    Permutations testPermutation = new Permutations("qwer", 2);
+    int count1 = testPermutation.getPermutationNumber();
+    ArrayList<String> result = new ArrayList<>();
+    for (int i = 1; i < count1; i++) {
+      result.add(testPermutation.next());
+    }
+    for (int i = 1; i < count1 - 1; i++) {
+      assertEquals(result.get(count1 -1 - i), testPermutation.previous());
+    }
+  }
+
+  @Test (expected = NoSuchElementException.class)
+  public void testPrevious2() {
+    Permutations testPermutation = new Permutations("qwer");
+    int count1 = testPermutation.getPermutationNumber();
+    for (int i = 0; i < count1 - 1; i++) {
+      testPermutation.next();
+    }
+    for (int i = 0; i < count1 - 1; i++) {
+      testPermutation.previous();
+    }
+    testPermutation.previous();
   }
 
 
